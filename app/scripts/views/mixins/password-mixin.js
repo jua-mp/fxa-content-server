@@ -12,6 +12,7 @@ define(function (require, exports, module) {
 
   module.exports = {
     events: {
+      'focus input.password': 'onPasswordFocus',
       'keyup input.password': 'onPasswordKeyUp',
       'mousedown .show-password-label': 'onShowPasswordMouseDown',
       'touchstart .show-password-label': 'onShowPasswordMouseDown'
@@ -33,6 +34,10 @@ define(function (require, exports, module) {
           this.$el.find('.show-password-label').hide();
         }
       }
+    },
+
+    onPasswordFocus (event) {
+      this.setVisibilityShowPassword(event.target);
     },
 
     onShowPasswordMouseDown (event) {
@@ -107,7 +112,8 @@ define(function (require, exports, module) {
       });
     },
 
-    onPasswordKeyUp () {
+    onPasswordKeyUp (event) {
+      this.setVisibilityShowPassword(event.target);
       var values = [];
 
       // Values contains all password classes length
@@ -121,6 +127,16 @@ define(function (require, exports, module) {
         this.showPasswordHelper();
       } else {
         this.hidePasswordHelper();
+      }
+    },
+
+    setVisibilityShowPassword (el) {
+      const $passwordField = $(el);
+      const $showPasswordLabel = $passwordField.siblings('.show-password-label');
+      if ($passwordField.val().length !== 0) {
+        $showPasswordLabel.removeClass('hidden');
+      } else {
+        $showPasswordLabel.addClass('hidden');
       }
     },
 

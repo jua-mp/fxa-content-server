@@ -105,13 +105,18 @@ define([
       return this.remote
         .setFindTimeout(intern.config.pageLoadTimeout)
         .get(require.toUrl(EXP_SHOWPASSWORD_URL + EXP_CONTROL))
+        .findByCssSelector('.password')
+          .type('asdf')
+        .end()
         .then(FunctionalHelpers.pollUntil(function () {
           return $('.show-password-label').is(':hidden') === false ? true : null;
         }, [], 10000))
 
         .then(click('.sign-in'))
         .then(testElementExists('#fxa-signin-header'))
-
+        .findByCssSelector('.password')
+          .type('asdf')
+        .end()
         .then(FunctionalHelpers.pollUntil(function () {
           return $('.show-password-label').is(':hidden') === false ? true : null;
         }, [], 10000));
